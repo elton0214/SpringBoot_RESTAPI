@@ -60,23 +60,7 @@ public class PatientService implements IPatientService {
 //      return patRepo.findById(patId);
 //  }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Patient patient = patRepo.findById(username);
-//        if(patient==null) {
-//            log.error("User not found in db");
-//            throw new UsernameNotFoundException("User not found in db");
-//        } else {
-//            log.info("User found in db: {}", username);
-//        }
-//
-//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        patient.getRoles().forEach(role -> {
-//            authorities.add(new SimpleGrantedAuthority(role.getName()));
-//        })
-//
-//        return org.springframework.security.core.userdetails.User(patient.getPatient_name(), patient.g, authorities, );
-//    }
+
 //
 
 //

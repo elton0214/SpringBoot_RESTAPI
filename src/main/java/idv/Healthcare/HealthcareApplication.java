@@ -23,10 +23,10 @@ public class HealthcareApplication {
 		SpringApplication.run(HealthcareApplication.class, args);
 	}
 
-//	@Bean
-//	PasswordEncoder passwordEncoder() {
-//		return new BCryptPasswordEncoder();
-//	}
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 	//58:40 go~
 
 	@Bean
@@ -40,9 +40,9 @@ public class HealthcareApplication {
 			patService.savePatient(new Patient("3","David","david@gmail.com","0988333",new Date()));
 
 			appuserService.saveApplicationUser(new ApplicationUser(
-					"user1",
-					"john@gmail.com",
-					"pwd1",
+					"sean",
+					"sean@gmail.com",
+					"1234",
 					"0988111",
 					"Taipei")
 			);
