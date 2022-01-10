@@ -17,6 +17,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 
+/**
+ * Web安全配置
+ * 配置過濾器
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,21 +29,33 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private JwtAuthorizationFilter jwtFilter;
 
+
+    /**
+     *
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
-//        auth.userDetailsService(userDetailsService).passwordEncoder(new bCryptPasswordEncoder);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManagerBean());
+        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeHttpRequests().anyRequest().permitAll();
+//        http.authorizeHttpRequests()                               // 定義哪些url需要被保護
+//                .antMatchers("/login").permitAll()      // 定義匹配到"/login" 不需要驗證 //antMatcher可以看成Match
+//                .antMatchers("/register").permitAll()   // 定義匹配到"/register" 不需要驗證
+//                .anyRequest().authenticated();                     // 其他尚未匹配到的url都需要身份驗證
+
         http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new JwtAuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);
+
 
 //        http.csrf()
 //                .disable()

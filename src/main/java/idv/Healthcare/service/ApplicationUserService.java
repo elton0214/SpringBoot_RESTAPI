@@ -51,10 +51,11 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
     }
 
     @Override
-    public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
-        Optional<ApplicationUser> applicationUser = appuserRepo.findByUseremail(useremail);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<ApplicationUser> applicationUser = appuserRepo.findById(username);
+//        Optional<ApplicationUser> applicationUser = appuserRepo.findByUseremail(useremail);
         if(applicationUser.isPresent()) {
-            log.info("User email found in db: {}", useremail);
+            log.info("User email found in db: {}", username);
         } else {
             log.error("User email not found in db");
             throw new UsernameNotFoundException("User not found in db");

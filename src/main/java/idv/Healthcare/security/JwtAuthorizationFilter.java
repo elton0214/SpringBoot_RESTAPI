@@ -25,6 +25,12 @@ import java.util.Map;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+/**
+ * 授權中介
+ * 解析JWT Token, 將token轉換回使用者，以利後續controller可直接抓取使用者資訊
+ * 除了Resign/Signin外，其他api都要通過
+ */
+
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
@@ -37,8 +43,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-//        String userName = null;
-        if(request.getServletPath().equals("/")) {
+        //if is "/api/login" or "/api/register" then no need to authorize
+        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/api/register")) {
             filterChain.doFilter(request,response);
         } else {
             String authorizationHeader = request.getHeader("Authorization");
