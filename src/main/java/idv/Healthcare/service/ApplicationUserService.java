@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,17 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
 
     private final ApplicationUserRepository appuserRepo;
     private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Override
+//    @Override //using username
+//    public ApplicationUser saveApplicationUser(ApplicationUser appuser) {
+//        log.info("Saving new user {} to the db", appuser.getUsername());
+//        appuser.setPassword(passwordEncoder.encode(appuser.getPassword()));
+//        return appuserRepo.save(appuser);
+//    }
+    @Override //using useremail
     public ApplicationUser saveApplicationUser(ApplicationUser appuser) {
-        log.info("Saving new user {} to the db", appuser.getUsername());
+        log.info("Saving new user {} to the db", appuser.getUseremail());
         appuser.setPassword(passwordEncoder.encode(appuser.getPassword()));
         return appuserRepo.save(appuser);
     }
@@ -41,21 +49,21 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
     }
 
     @Override
-    public List<ApplicationUser> getApplicationUsers() {
-        return appuserRepo.findAll();
-    }
-
-    @Override
     public Optional<ApplicationUser> findByUseremail(String useremail) {
         return appuserRepo.findByUseremail(useremail);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<ApplicationUser> applicationUser = appuserRepo.findById(username);
+    public List<ApplicationUser> getApplicationUsers() {
+        return appuserRepo.findAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
+        Optional<ApplicationUser> applicationUser = appuserRepo.findByUseremail(useremail);
 //        Optional<ApplicationUser> applicationUser = appuserRepo.findByUseremail(useremail);
         if(applicationUser.isPresent()) {
-            log.info("User email found in db: {}", username);
+            log.info("User email found in db: {}", useremail);
         } else {
             log.error("User email not found in db");
             throw new UsernameNotFoundException("User not found in db");
@@ -67,8 +75,47 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
 //        })
 //        return new ApplicationUser(applicationUser.get().getUsername(), applicationUser.get().getPassword());
 
-        return new org.springframework.security.core.userdetails.User(applicationUser.get().getUsername(), applicationUser.get().getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(applicationUser.get().getUseremail(), applicationUser.get().getPassword(), new ArrayList<>());
     }
+
+    public String signUpUser(ApplicationUser applicationUser) {
+        boolean userExists = appuserRepo
+                .findByUseremail(applicationUser.getUseremail())
+                .isPresent();
+
+        if (userExists) {
+            throw new IllegalStateException("email aleady token");
+        }
+
+        String encodedPassword = bCryptPasswordEncoder
+                .encode(applicationUser.getPassword());
+
+        applicationUser.setPassword(encodedPassword);
+        appuserRepo.save(applicationUser);
+
+        return "it works";
+    }
+
+//    private final EmailValidator emailValidator;
+//    @Override
+    public String register(ApplicationUser applicationUser) {
+//        boolean isValidEmail = emailValidator.
+//                test(applicationUser.getUseremail());
+//        if (!isValidEmail) {
+//            throw new IllegalStateException("email not valid")
+//        }
+        return  this.signUpUser(new ApplicationUser(
+                applicationUser.getUsername(),
+                applicationUser.getPassword(),
+                applicationUser.getUseremail(),
+                applicationUser.getLocation(),
+                applicationUser.getUser_mobile()
+                )
+
+        );
+    }
+
+
 
 //    @Override
 //    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

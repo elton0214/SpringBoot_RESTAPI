@@ -18,6 +18,7 @@ import java.util.Optional;
 public class AppointmentController {
     private final IAppointmentService iAppointmentService;
 
+
     // POST a appointment
     @PostMapping("/register")
     public Appointment createAppointment(@RequestBody Appointment appointment) {

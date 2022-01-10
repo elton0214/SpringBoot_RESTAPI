@@ -3,9 +3,11 @@ package idv.Healthcare;
 import idv.Healthcare.Model.ApplicationUser;
 import idv.Healthcare.Model.Appointment;
 import idv.Healthcare.Model.Patient;
+import idv.Healthcare.service.ApplicationUserService;
 import idv.Healthcare.service.IApplicationUserService;
 import idv.Healthcare.service.IAppointmentService;
 import idv.Healthcare.service.IPatientService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +32,7 @@ public class HealthcareApplication {
 	//58:40 go~
 
 	@Bean
-	CommandLineRunner run(IPatientService patService, IApplicationUserService appuserService, IAppointmentService appmtService) {
+	CommandLineRunner run(IPatientService patService, ApplicationUserService appuserService, IAppointmentService appmtService) {
 
 		return args -> {
 			Patient patient1 = new Patient("1","John","john@gmail.com","0988111", new Date());
@@ -39,13 +41,13 @@ public class HealthcareApplication {
 			patService.savePatient(patient2);
 			patService.savePatient(new Patient("3","David","david@gmail.com","0988333",new Date()));
 
-			appuserService.saveApplicationUser(new ApplicationUser(
-					"sean",
-					"sean@gmail.com",
-					"1234",
-					"0988111",
-					"Taipei")
-			);
+//			appuserService.saveApplicationUser(new ApplicationUser(
+//					"sean",
+//					"sean@gmail.com",
+//					"1234",
+//					"0988111",
+//					"Taipei")
+//			);
 
 
 			appmtService.saveAppointment(new Appointment(

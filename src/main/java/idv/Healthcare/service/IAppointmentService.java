@@ -12,7 +12,7 @@ public interface IAppointmentService {
     //CREATE
     Appointment saveAppointment(Appointment appmt);
     Patient savePatient(Patient pat);
-//    String savePatient_id(String patient_id);
+
     void addPatientToAppointment(String booking_id, String patient_id);
 //    Patient getPatient(Patient pat);
 

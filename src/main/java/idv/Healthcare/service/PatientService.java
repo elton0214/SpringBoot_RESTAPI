@@ -26,9 +26,21 @@ public class PatientService implements IPatientService {
 
     private final PatientRepository patRepo;
 
+//    @Override
+//    public Patient savePatient(Patient pat) {
+//        return patRepo.save(pat);
+//    }
+
     @Override
-    public Patient savePatient(Patient pat) {
-        return patRepo.save(pat);
+    public String savePatient(Patient pat) {
+        try {
+            patRepo.save(pat);
+            return "{message=\"Registration successful\"}";
+        } catch(Exception ex) {
+            // not working now
+            return "{message=\"Registration failure\"}";
+        }
+
     }
 
 

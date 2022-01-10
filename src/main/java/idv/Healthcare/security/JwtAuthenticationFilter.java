@@ -45,9 +45,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = request.getParameter("username");
+        String useremail = request.getParameter("useremail");
         String password = request.getParameter("password");
-        log.info("Username is {}", username); log.info("Password is {}", password);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        log.info("Useremail is {}", useremail); log.info("Password is {}", password);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(useremail, password);
         return authenticationManager.authenticate(authenticationToken);
     }
 

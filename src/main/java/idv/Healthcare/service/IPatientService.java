@@ -10,8 +10,8 @@ import java.util.Optional;
 public interface IPatientService {
 
     // CREATE
-    Patient savePatient(Patient pat);
-//    Patient getPatient(String pat_id);
+//    Patient savePatient(Patient pat);
+    String savePatient(Patient pat);
 
     // READ
     // 1.list of all patients

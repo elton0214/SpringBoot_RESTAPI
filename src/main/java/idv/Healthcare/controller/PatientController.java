@@ -55,9 +55,12 @@ public class PatientController {
 
   // POST a patient
   @PostMapping("/register")
-    public Patient createPatient(@RequestBody Patient patient) {
+  public String createPatient(@RequestBody Patient patient) {
       return iPatientService.savePatient(patient);
   }
+//    public Patient createPatient(@RequestBody Patient patient) {
+//      return iPatientService.savePatient(patient);
+//  }
 
     // GET a patient
     @GetMapping("/view/{id}")

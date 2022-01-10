@@ -1,16 +1,15 @@
 package idv.Healthcare.Model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import lombok.RequiredArgsConstructor;
+
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -18,6 +17,8 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
 public class ApplicationUser {
     @Id
 //    @GeneratedValue(generator="system_uuid")
@@ -46,6 +47,10 @@ public class ApplicationUser {
         this.username = user_name;
         this.password = password;
     }
+//    public String getUsername() {
+//        return useremail;
+//    }
+
 
     //    public Date user_dob;
 
