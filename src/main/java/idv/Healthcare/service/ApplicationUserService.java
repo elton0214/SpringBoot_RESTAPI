@@ -30,7 +30,8 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
 
     @Override
     public ApplicationUser saveApplicationUser(ApplicationUser appuser) {
-        log.info("Saving new user {} to the db", appuser.getPassword());
+        log.info("Saving new user {} to the db", appuser.getUsername());
+        appuser.setPassword(passwordEncoder.encode(appuser.getPassword()));
         return appuserRepo.save(appuser);
     }
 
@@ -45,12 +46,17 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<ApplicationUser> applicationUser = appuserRepo.findByUsername(username);
+    public Optional<ApplicationUser> findByUseremail(String useremail) {
+        return appuserRepo.findByUseremail(useremail);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String useremail) throws UsernameNotFoundException {
+        Optional<ApplicationUser> applicationUser = appuserRepo.findByUseremail(useremail);
         if(applicationUser.isPresent()) {
-            log.info("User found in db: {}", username);
+            log.info("User email found in db: {}", useremail);
         } else {
-            log.error("User not found in db");
+            log.error("User email not found in db");
             throw new UsernameNotFoundException("User not found in db");
         }
 
@@ -62,5 +68,25 @@ public class ApplicationUserService implements IApplicationUserService, UserDeta
 
         return new org.springframework.security.core.userdetails.User(applicationUser.get().getUsername(), applicationUser.get().getPassword(), new ArrayList<>());
     }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        Optional<ApplicationUser> applicationUser = appuserRepo.findByUsername(username);
+//        if(applicationUser.isPresent()) {
+//            log.info("User found in db: {}", username);
+//        } else {
+//            log.error("User not found in db");
+//            throw new UsernameNotFoundException("User not found in db");
+//        }
+//
+////        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+////        applicationUser.getRoles().forEach(role -> {
+////            authorities.add(new SimpleGrantedAuthority(role.getName()));
+////        })
+////        return new ApplicationUser(applicationUser.get().getUsername(), applicationUser.get().getPassword());
+//
+//        return new org.springframework.security.core.userdetails.User(applicationUser.get().getUsername(), applicationUser.get().getPassword(), new ArrayList<>());
+//    }
+
 }
 

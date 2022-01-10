@@ -23,7 +23,7 @@ public class ApplicationUser {
 //    @GeneratedValue(generator="system_uuid")
 //    @GenericGenerator(name="system_uuid",strategy="uuid")
     public String username;
-    public String user_email;
+    public String useremail;
     public String password;
     public String user_mobile;
     public String location;

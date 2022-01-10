@@ -1,6 +1,7 @@
 package idv.Healthcare.controller;
 
 import idv.Healthcare.Model.ApplicationUser;
+import idv.Healthcare.Model.Appointment;
 import idv.Healthcare.Model.Patient;
 import idv.Healthcare.service.IApplicationUserService;
 import idv.Healthcare.service.IPatientService;
@@ -16,6 +17,13 @@ import java.util.Optional;
 public class ApplicationUserController {
     private final IApplicationUserService iAppUsrService;
 
+//    // GET a patient
+//    @GetMapping("/viewprofile/{id}")
+//    public @ResponseBody
+//    Optional<ApplicationUser> getApplicationUser(@PathVariable("id") String id) throws Exception {
+//        return iAppUsrService.findByUsername(id);
+//    }
+
     // GET users
     @GetMapping("/list")
     List<ApplicationUser> all() {
@@ -28,6 +36,8 @@ public class ApplicationUserController {
 
         return iAppUsrService.saveApplicationUser(applicationUser);
     }
+
+
 
     // GET a user
 //    @GetMapping("/view/{id}")

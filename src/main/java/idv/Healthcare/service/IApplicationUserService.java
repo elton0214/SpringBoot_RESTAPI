@@ -16,6 +16,8 @@ public interface IApplicationUserService {
     Optional<ApplicationUser> findByUsername(String username);
     List<ApplicationUser>getApplicationUsers();
 
+    Optional<ApplicationUser> findByUseremail(String useremail);
+
     // UPDATE
 
 

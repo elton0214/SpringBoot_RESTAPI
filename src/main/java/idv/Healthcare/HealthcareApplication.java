@@ -55,7 +55,6 @@ public class HealthcareApplication {
 					"1",
 					"1",
 					new Date()
-//					,patient1
 					)
 			);
 
@@ -66,7 +65,6 @@ public class HealthcareApplication {
 							"1",
 							"2",
 							new Date()
-//							,patient2
 					)
 			);
 
@@ -77,7 +75,16 @@ public class HealthcareApplication {
 							"1",
 							"1",
 							new Date()
-//							,patient1
+					)
+			);
+
+			appmtService.saveAppointment(new Appointment(
+							"4",
+							"disease3",
+							new Date(),
+							"1",
+							"1",
+							new Date()
 					)
 			);
 
