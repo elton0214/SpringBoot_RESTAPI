@@ -2,13 +2,15 @@ package idv.Healthcare.Model;
 
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import static javax.persistence.GenerationType.AUTO;
@@ -17,39 +19,55 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
-public class ApplicationUser {
-    @Id
-//    @GeneratedValue(generator="system_uuid")
-//    @GenericGenerator(name="system_uuid",strategy="uuid")
-    public String username;
+public class ApplicationUser implements UserDetails{
+    @Id @GeneratedValue(strategy = AUTO)
+    private Long id;
+    public String username1;
     public String useremail;
     public String password;
     public String user_mobile;
     public String location;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles = new ArrayList<>();
 
-//    public ApplicationUser(String user_name, String user_email, String password, String user_mobile, String location) {
-//        super();
-//        this.user_name = user_name;
-//        this.user_email = user_email;
-//        this.password = password;
-//        this.user_mobile = user_mobile;
-//        this.location = location;
-//    }
 
-//    public ApplicationUser() {
-//        super();
-//    }
 
-    public ApplicationUser(String user_name, String password) {
+
+    public ApplicationUser(String useremail, String password) {
         super();
-        this.username = user_name;
+        this.useremail = useremail;
         this.password = password;
     }
-//    public String getUsername() {
-//        return useremail;
-//    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return useremail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 
     //    public Date user_dob;

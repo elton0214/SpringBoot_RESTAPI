@@ -35,9 +35,6 @@ public class Appointment {
     private String patientid;
     private Date bookingTime;
 
-//    @ManyToOne
-//    private Patient patient;
-
     public Appointment( String disease, Date tentativeDate, String priority, String patientId) {
         super();
 

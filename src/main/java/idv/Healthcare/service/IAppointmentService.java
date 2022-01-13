@@ -10,10 +10,10 @@ import java.util.Optional;
 public interface IAppointmentService {
 
     //CREATE
-    Appointment saveAppointment(Appointment appmt);
+    String saveAppointment(Appointment appmt); //register
     Patient savePatient(Patient pat);
 
-    void addPatientToAppointment(String booking_id, String patient_id);
+//    void addPatientToAppointment(String booking_id, String patient_id);
 //    Patient getPatient(Patient pat);
 
     // READ

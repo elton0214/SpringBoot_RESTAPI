@@ -44,30 +44,26 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManagerBean());
-        jwtAuthenticationFilter.setFilterProcessesUrl("/api/login");
+        jwtAuthenticationFilter.setFilterProcessesUrl("/login"); //Sets the URL that determines if authentication is required
+
+
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeHttpRequests().anyRequest().permitAll();
-//        http.authorizeHttpRequests()                               // 定義哪些url需要被保護
-//                .antMatchers("/login").permitAll()      // 定義匹配到"/login" 不需要驗證 //antMatcher可以看成Match
-//                .antMatchers("/register").permitAll()   // 定義匹配到"/register" 不需要驗證
-//                .anyRequest().authenticated();                     // 其他尚未匹配到的url都需要身份驗證
+//        http.authorizeHttpRequests().anyRequest().permitAll();
 
-        http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));
+        http.authorizeHttpRequests()                               // 定義哪些url需要被保護
+                .antMatchers("/login").permitAll()
+                .antMatchers("/view/**").hasAnyAuthority("ROLE_USER")      // 定義匹配到"/login" 不需要驗證 //antMatcher可以看成Match
+                .antMatchers("/register").permitAll()    // 定義匹配到"/register" 不需要驗證
+                .anyRequest().authenticated().and() // 其他尚未匹配到的url都需要身份驗證
+                .formLogin() //開啟表單的身份驗證，如果未指定
+                .usernameParameter("useremail");
+//                .and()
+//                .httpBasic();
+
+        http.addFilter(jwtAuthenticationFilter);
         http.addFilterBefore(new JwtAuthorizationFilter(),UsernamePasswordAuthenticationFilter.class);
 
-
-//        http.csrf()
-//                .disable()
-//                .authorizeRequests()
-//                .antMatchers("/**")
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

@@ -26,11 +26,6 @@ public class PatientService implements IPatientService {
 
     private final PatientRepository patRepo;
 
-//    @Override
-//    public Patient savePatient(Patient pat) {
-//        return patRepo.save(pat);
-//    }
-
     @Override
     public String savePatient(Patient pat) {
         try {
@@ -43,17 +38,10 @@ public class PatientService implements IPatientService {
 
     }
 
-
-
     @Override
     public Optional<Patient> findById(String patientid) {
         return patRepo.findById(patientid);
     }
-//    @Override
-//    public Patient getPatient(String patient_id) {
-//        log.info("Fetching a Patient");
-//        return patRepo.findByPatient_id(patient_id);
-//    }
 
     @Override
     public List<Patient> getPatients(){
@@ -66,24 +54,5 @@ public class PatientService implements IPatientService {
     public void deletePatient(String patientid) {
         patRepo.deleteById(patientid);
     }
-
-//  // READ
-//  public Optional<Patient> getPatient(String patId) {
-//      return patRepo.findById(patId);
-//  }
-
-
-//
-
-//
-//  // UPDATE
-//  public Patient updatePatient(String patId, Patient patientDetails) {
-//          Patient pat = patRepository.findById(patId).get();
-//          pat.setFirstName(patientDetails.getFirstName());
-//          pat.setLastName(patientDetails.getLastName());
-//          pat.setEmailId(patientDetails.getEmailId());
-//
-//          return patRepository.save(pat);
-//  }
 
 }

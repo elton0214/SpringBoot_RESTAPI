@@ -3,6 +3,7 @@ package idv.Healthcare;
 import idv.Healthcare.Model.ApplicationUser;
 import idv.Healthcare.Model.Appointment;
 import idv.Healthcare.Model.Patient;
+import idv.Healthcare.Model.Role;
 import idv.Healthcare.service.ApplicationUserService;
 import idv.Healthcare.service.IApplicationUserService;
 import idv.Healthcare.service.IAppointmentService;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -29,7 +31,6 @@ public class HealthcareApplication {
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	//58:40 go~
 
 	@Bean
 	CommandLineRunner run(IPatientService patService, ApplicationUserService appuserService, IAppointmentService appmtService) {
@@ -41,13 +42,33 @@ public class HealthcareApplication {
 			patService.savePatient(patient2);
 			patService.savePatient(new Patient("3","David","david@gmail.com","0988333",new Date()));
 
-//			appuserService.saveApplicationUser(new ApplicationUser(
-//					"sean",
-//					"sean@gmail.com",
-//					"1234",
-//					"0988111",
-//					"Taipei")
-//			);
+			appuserService.saveRole(new Role(null, "ROLE_USER"));
+			appuserService.saveRole(new Role(null, "ROLE_ADMIN"));
+
+			appuserService.saveApplicationUser(new ApplicationUser(
+					null,
+					"john",
+					"john@gmail.com",
+					"1234",
+					"0988111",
+					"Taipei",
+					new ArrayList<>())
+			);
+
+
+			appuserService.saveApplicationUser(new ApplicationUser(
+					 null,
+					"sean",
+					"sean@gmail.com",
+					"1234",
+					"0988111",
+					"Taipei",
+					new ArrayList<>())
+			);
+
+			appuserService.addRoleToUser("john", "ROLE_USER");
+			appuserService.addRoleToUser("sean", "ROLE_USER");
+
 
 
 			appmtService.saveAppointment(new Appointment(
@@ -91,7 +112,7 @@ public class HealthcareApplication {
 			);
 
 
-			appmtService.addPatientToAppointment("1","1");
+//			appmtService.addPatientToAppointment("1","1");
 
 			//test patient
 			String id2 = "3";

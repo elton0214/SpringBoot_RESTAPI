@@ -1,29 +1,33 @@
 package idv.Healthcare.service;
 
 import idv.Healthcare.Model.ApplicationUser;
-import idv.Healthcare.Model.Appointment;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
+import idv.Healthcare.Model.Role;
 
 @Repository
 //@Transactional(readOnly = true)
 public interface IApplicationUserService {
 
     // CREATE
-    ApplicationUser saveApplicationUser(ApplicationUser appuser);
+    String saveApplicationUser(ApplicationUser appuser);
+    Role saveRole(Role role);
+    void addRoleToUser(String username1, String rolename);
     String register(ApplicationUser applicationUser);
 
     // READ
 //    ApplicationUser getApplicationUser(String user_name);
-    Optional<ApplicationUser> findByUsername(String username);
-    List<ApplicationUser>getApplicationUsers();
+    Optional<ApplicationUser> getUser(Long id);
+    List<ApplicationUser> getUsers();
 
     Optional<ApplicationUser> findByUseremail(String useremail);
 
     // UPDATE
+    String editApplicationUser(ApplicationUser applicationUser);
+
+    // DELETE
+    void deleteApplicationUser(Long userid);
 
 
 

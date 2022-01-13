@@ -18,25 +18,40 @@ public class AppointmentService implements IAppointmentService{
     private final AppointmentRepository appmtRepo;
     private final PatientRepository patRepo;
 
+
+//    @Override
+//    public Appointment saveAppointment(Appointment appmt) {
+//        return appmtRepo.save(appmt);
+//    }
+
     @Override
-    public Appointment saveAppointment(Appointment appmt) {
-        return appmtRepo.save(appmt);
+    public String saveAppointment(Appointment appmt) {
+
+        try {
+            appmtRepo.save(appmt);
+            return "{message=\"Booking successful\"}";
+        } catch(Exception ex) {
+            // not working now
+            return "{message=\"Booking failure\"}";
+        }
     }
+
+
 
     @Override
     public Patient savePatient(Patient pat) {
         return patRepo.save(pat);
     }
 
-    @Override
-    public void addPatientToAppointment(String booking_id, String patient_id) {
-//        Patient patient = patRepo.findByPatientid(patient_id);
-        Optional<Appointment> appointment = appmtRepo.findByBookingid(booking_id);
-//        appointment.get().setPatient(patient);
-        appointment.get().setPatientid(patient_id);
-
-        //user.getRoles().add(role);
-    }
+//    @Override
+//    public void addPatientToAppointment(String booking_id, String patient_id) {
+////        Patient patient = patRepo.findByPatientid(patient_id);
+//        Optional<Appointment> appointment = appmtRepo.findByBookingid(booking_id);
+////        appointment.get().setPatient(patient);
+//        appointment.get().setPatientid(patient_id);
+//
+//        //user.getRoles().add(role);
+//    }
 
 //    @Override
 //    public Patient getPatient(Patient patient_id) {

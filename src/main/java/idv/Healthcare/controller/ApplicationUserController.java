@@ -1,52 +1,81 @@
 package idv.Healthcare.controller;
 
+import idv.Healthcare.Exception.ApiRequestException;
 import idv.Healthcare.Model.ApplicationUser;
-import idv.Healthcare.Model.Appointment;
-import idv.Healthcare.Model.Patient;
 import idv.Healthcare.service.IApplicationUserService;
-import idv.Healthcare.service.IPatientService;
+import idv.Healthcare.Model.Role;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class ApplicationUserController {
     private final IApplicationUserService iAppUsrService;
 
-//    // GET a patient
-//    @GetMapping("/viewprofile/{id}")
-//    public @ResponseBody
-//    Optional<ApplicationUser> getApplicationUser(@PathVariable("id") String id) throws Exception {
-//        return iAppUsrService.findByUsername(id);
-//    }
-
     // POST(create) a user
     @PostMapping("/register")
-    public ApplicationUser createApplicationUser(@RequestBody ApplicationUser applicationUser) {
+    public String saveUser(@RequestBody ApplicationUser applicationUser) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/register").toUriString());
         return iAppUsrService.saveApplicationUser(applicationUser);
+    }
+
+    @PostMapping("/editprofile")
+    public String modifyUser(@RequestBody ApplicationUser applicationUser) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/register").toUriString());
+        return iAppUsrService.editApplicationUser(applicationUser);
+    }
+
+    @PostMapping("/saverole")
+    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/saverole").toUriString());
+        return ResponseEntity.created(uri).body(iAppUsrService.saveRole(role));
+    }
+
+    @PostMapping("/addroletouser")
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
+        iAppUsrService.addRoleToUser(form.getUsername(), form.getRolename());
+        return ResponseEntity.ok().build();
     }
 
     // GET users
     @GetMapping("/list")
-    List<ApplicationUser> all() {
-        return iAppUsrService.getApplicationUsers();
+    public ResponseEntity<List<ApplicationUser>> getUsers() {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/saverole").toUriString());
+        return ResponseEntity.created(uri).body(iAppUsrService.getUsers());
     }
 
+    //GET a user
+    @GetMapping("/viewprofile/{id}")
+    public @ResponseBody
+    Optional<ApplicationUser> getApplicationUser(@PathVariable("id") Long id) throws Exception {
 
+        Optional<ApplicationUser> x = iAppUsrService.getUser(id);
+        if (x.isEmpty()) {
+            throw new ApiRequestException("123");
+        }
+        return iAppUsrService.getUser(id);
+    }
 
-
-
-    // GET a user
-//    @GetMapping("/view/{id}")
-//    public @ResponseBody
-//    Optional<ApplicationUser> getApplicationUser(@PathVariable("id") String id) throws Exception {
-//        return iAppUsrService.findByUsername(id);
-//    }
-
+    //DELETE a user
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    void deleteApplicationUser(@PathVariable("id") Long id) throws Exception {
+        iAppUsrService.deleteApplicationUser(id);
+    }
 }
 
+@Data
+class RoleToUserForm {
+    private String username;
+    private String rolename;
+}

@@ -21,7 +21,8 @@ public class AppointmentController {
 
     // POST a appointment
     @PostMapping("/register")
-    public Appointment createAppointment(@RequestBody Appointment appointment) {
+    public String createAppointment(@RequestBody Appointment appointment) {
+
         return iAppointmentService.saveAppointment(appointment);
     }
 
@@ -39,10 +40,6 @@ public class AppointmentController {
     List<Optional<Appointment>> getAppmtsFromPatient(@PathVariable("id") String id) throws Exception {
         return iAppointmentService.findByPatientid(id);
     }
-
-//    Patient getPatient(String patient_id) {
-//        return IPatientService.findById(id);
-//    };
 
     // GET appointments
     @GetMapping("/list")

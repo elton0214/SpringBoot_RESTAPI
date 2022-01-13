@@ -29,20 +29,4 @@ public class Patient {
     private String patient_mobile;
     private Date registeredDate;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private Collection<Appointment> appmt = new ArrayList<>();
-
-
-//    public Patient(String patient_name, String patient_email, String patient_mobile, Date registeredDate) {
-//        this.patient_name = patient_name;
-//        this.patient_email = patient_email;
-//        this.patient_mobile = patient_mobile;
-//        this.registeredDate = registeredDate;
-//    }
-
-//    public Patient() {
-//        super();
-//    }
-
 }

@@ -9,9 +9,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -37,14 +39,16 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+//    private final UrlPathHelper urlPathHelper;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+//        urlPathHelper = null; // NEW ADD
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String username = request.getParameter("username");
+        String username = request.getParameter("username1");
         String useremail = request.getParameter("useremail");
         String password = request.getParameter("password");
         log.info("Useremail is {}", useremail); log.info("Password is {}", password);
@@ -72,8 +76,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() +10*60*1000))
                 .withIssuer(request.getRequestURL().toString())
-//                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
+       log.info("successfulAuthentication withSubject(user.getUsername()): {}", user.getUsername());
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
@@ -83,23 +88,39 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 //        response.setHeader("access_token", access_token);
 //        response.setHeader("refresh_token", refresh_token);
-        Map<String,String> tokens = new HashMap<>();
-        tokens.put("access_token", access_token);
-        tokens.put("refresh_token", refresh_token);
-        response.setContentType(APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
-//        response.setHeader("Content-Type", "text/plain");
-//        response.setHeader("success", "yes");
-//        PrintWriter writer = response.getWriter();
-//        writer.write("hello\n");
-//        writer.write("message=\"Authentication successful!\",\n" +
-//                "\n" +
-//                "token =" +access_token+",\n" +
-//                "id=user.Id\n");
+//        Map<String,String> tokens = new HashMap<>();
+//        tokens.put("access_token", access_token);
+//        tokens.put("refresh_token", refresh_token);
+//        response.setContentType(APPLICATION_JSON_VALUE);
+//        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+
+        response.setHeader("Content-Type", "text/plain");
+        response.setHeader("success", "yes");
+        PrintWriter writer = response.getWriter();
+        writer.write("{message=\"Authentication successful!\",\n" +
+                "\n" +
+                "token = " +access_token + ",\n" +
+                "id="+user.getUsername()+"}");
+
+        writer.close();
+
+
+
+    }
+
+
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException, ServletException {
+    log.info("unsuccessfulAuthentication");
+//    logger.debug("failed authentication while attempting to access "
+//                + urlPathHelper.getPathWithinApplication((HttpServletRequest) request));
 //
-//        writer.close();
-
+//        //Add more descriptive message
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                "Authentication Failed");
     }
 
 
