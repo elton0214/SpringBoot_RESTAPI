@@ -104,9 +104,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 "id="+user.getUsername()+"}");
 
         writer.close();
-
-
-
     }
 
 
