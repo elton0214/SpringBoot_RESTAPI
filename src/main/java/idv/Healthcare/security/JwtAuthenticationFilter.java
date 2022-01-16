@@ -89,21 +89,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //        response.setHeader("access_token", access_token);
 //        response.setHeader("refresh_token", refresh_token);
 
-//        Map<String,String> tokens = new HashMap<>();
-//        tokens.put("access_token", access_token);
+        Map<String,String> tokens = new HashMap<>();
+        tokens.put("token", access_token);
 //        tokens.put("refresh_token", refresh_token);
-//        response.setContentType(APPLICATION_JSON_VALUE);
-//        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+        response.setContentType(APPLICATION_JSON_VALUE);
+        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
 
-        response.setHeader("Content-Type", "text/plain");
-        response.setHeader("success", "yes");
-        PrintWriter writer = response.getWriter();
-        writer.write("{message=\"Authentication successful!\",\n" +
-                "\n" +
-                "token = " +access_token + ",\n" +
-                "id="+user.getUsername()+"}");
-
-        writer.close();
+//        response.setHeader("Content-Type", "text/plain");
+//        response.setHeader("success", "yes");
+//        PrintWriter writer = response.getWriter();
+//        writer.write("{message=\"Authentication successful!\",\n" +
+//                "\n" +
+//                "token = " +access_token + ",\n" +
+//                "id="+user.getUsername()+"}");
+//
+//        writer.close();
     }
 
 
