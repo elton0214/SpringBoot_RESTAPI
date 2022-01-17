@@ -6,13 +6,17 @@ import idv.Healthcare.service.IApplicationUserService;
 import idv.Healthcare.Model.Role;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -49,20 +53,27 @@ public class ApplicationUserController {
     // GET users
     @GetMapping("/list")
     public ResponseEntity<List<ApplicationUser>> getUsers() {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/saverole").toUriString());
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/list").toUriString());
         return ResponseEntity.created(uri).body(iAppUsrService.getUsers());
     }
 
     //GET a user
     @GetMapping("/viewprofile/{id}")
-    public @ResponseBody
-    Optional<ApplicationUser> getApplicationUser(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<ApplicationUser> getApplicationUser(@PathVariable("id") Long id) throws Exception {
 
-        Optional<ApplicationUser> x = iAppUsrService.getUser(id);
-        if (x.isEmpty()) {
-            throw new ApiRequestException("123");
-        }
-        return iAppUsrService.getUser(id);
+//        Optional<ApplicationUser> appuser = iAppUsrService.getUser(id);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentType(MediaType.APPLICATION_JSON);
+        responseHeaders.setAccessControlAllowCredentials(true);
+        responseHeaders.setAccessControlAllowOrigin("*");
+
+//        if (x.isEmpty()) {
+//            throw new ApiRequestException("123");
+//        }
+        return new ResponseEntity<ApplicationUser>(iAppUsrService.getUser(id).get(), responseHeaders, HttpStatus.CREATED);
+
+//        return iAppUsrService.getUser(id);
     }
 
     //DELETE a user
